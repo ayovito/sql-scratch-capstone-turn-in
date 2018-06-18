@@ -1,0 +1,128 @@
+Q1
+
+SELECT *
+FROM survey
+LIMIT 10;
+
+
+Q2
+
+SELECT question, COUNT(*)
+FROM survey
+GROUP BY question;
+ 
+ 
+Q3
+ 
+Excel sheet
+ 
+ 
+Q4
+ 
+SELECT *
+FROM quiz
+LIMIT 5;
+ 
+SELECT *
+FROM home_try_on
+LIMIT 5;
+ 
+SELECT *
+FROM purchase
+LIMIT 5;
+ 
+ 
+Q5
+ 
+SELECT DISTINCT 
+  q.user_id, 
+  h.user_id IS NOT NULL AS 'is_home_try_on',
+  h.number_of_pairs,
+  p.user_id IS NOT NULL AS 'is_purchase'
+FROM quiz q
+LEFT JOIN home_try_on h on q.user_id = h.user_id
+LEFT JOIN purchase p on p.user_id = q.user_id
+LIMIT 10;
+
+Q6
+
+WITH funnels AS (SELECT DISTINCT 
+ q.user_id, 
+ h.user_id is not null as is_home_try_on, 
+ h.number_of_pairs, 
+ p.user_id is not null as    is_purchase 
+FROM quiz q
+LEFT JOIN purchase p on q.user_id = p.user_id
+LEFT JOIN home_try_on h on h.user_id = q.user_id)                 
+SELECT COUNT(is_home_try_on) as num_try_on,
+number_of_pairs,
+COUNT(
+    CASE
+      WHEN is_purchase = 1 THEN user_id
+      ELSE NULL
+    END) as num_purchase
+FROM funnels
+GROUP BY number_of_pairs;
+
+
+SELECT style, COUNT(*) AS  'Purchased'
+FROM purchase
+GROUP BY style
+ORDER BY Purchased desc; 
+  
+SELECT style, number_of_pairs, COUNT(*) AS 'Purchased'
+FROM purchase p JOIN home_try_on h
+ON p.user_id = h.user_id 
+GROUP BY style, number_of_pairs
+ORDER BY Purchased desc; 
+
+SELECT product_id, model_name, color, price, COUNT(*) AS 'Purchased'
+FROM purchase
+WHERE style LIKE 'W%'
+GROUP BY product_id
+ORDER BY Purchased desc;
+
+SELECT model_name, COUNT(*) AS 'Purchased'
+FROM purchase
+WHERE style LIKE 'W%'
+GROUP BY model_name
+ORDER BY Purchased desc;
+ 
+SELECT color, COUNT(*) AS 'Purchased'
+FROM purchase
+WHERE style LIKE 'W%'
+GROUP BY color
+ORDER BY Purchased desc;
+ 
+SELECT price, COUNT(*) AS 'Purchased'
+FROM purchase
+WHERE style LIKE 'W%'
+GROUP BY price
+ORDER BY Purchased desc;
+
+SELECT product_id, model_name, color, price, COUNT(*) AS 'Purchased'
+FROM purchase
+WHERE style LIKE 'M%'
+GROUP BY product_id
+ORDER BY Purchased desc;
+
+SELECT model_name, COUNT(*) AS 'Purchased'
+FROM purchase
+WHERE style LIKE 'M%'
+GROUP BY model_name
+ORDER BY Purchased desc;
+ 
+SELECT color, COUNT(*) AS 'Purchased'
+FROM purchase
+WHERE style LIKE 'M%'
+GROUP BY color
+ORDER BY Purchased desc;
+ 
+ 
+SELECT price, COUNT(*) AS 'Purchased'
+FROM purchase
+WHERE style LIKE 'M%'
+GROUP BY price
+ORDER BY Purchased desc;
+
+
